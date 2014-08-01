@@ -1,4 +1,4 @@
-package sheduler;
+package sheduler
 
 /////////////////////////////////
 // TODO: find out best sheduler
@@ -6,10 +6,10 @@ package sheduler;
 
 type shedulerNGoroutines struct {
 	result chan *TaskResult
-	count int
-	input chan Task
+	count  int
+	input  chan Task
 	inputs []chan Task
-	free chan int
+	free   chan int
 }
 
 func (self *shedulerNGoroutines) Run() {
@@ -18,7 +18,7 @@ func (self *shedulerNGoroutines) Run() {
 			self.free <- n
 			for task := range self.inputs[n] {
 				self.result <- &TaskResult{
-					Task: task,
+					Task:   task,
 					Output: task.Run(),
 				}
 				self.free <- n
@@ -65,14 +65,13 @@ func (self *shedulerNGoroutines) Result() chan *TaskResult {
 	return self.result
 }
 
-
 func newShedulerNGoroutines(cnt int) *shedulerNGoroutines {
 	r := shedulerNGoroutines{
-		count: cnt,
+		count:  cnt,
 		result: make(chan *TaskResult),
-		input: make(chan Task),
+		input:  make(chan Task),
 		inputs: make([]chan Task, cnt),
-		free: make(chan int),
+		free:   make(chan int),
 	}
 
 	for i := 0; i < cnt; i++ {
@@ -82,10 +81,9 @@ func newShedulerNGoroutines(cnt int) *shedulerNGoroutines {
 	return &r
 }
 
-
 type shedulerNative struct {
-	result chan *TaskResult
-	input chan Task
+	result   chan *TaskResult
+	input    chan Task
 	semaphor chan struct{}
 }
 
@@ -96,7 +94,7 @@ func (self *shedulerNative) Run() {
 		go func() {
 			res := task.Run()
 			self.result <- &TaskResult{
-				Task: task,
+				Task:   task,
 				Output: res,
 			}
 			<-self.semaphor
@@ -131,8 +129,8 @@ func (self *shedulerNative) Result() chan *TaskResult {
 
 func newShedulerNative(cnt int) *shedulerNative {
 	r := shedulerNative{
-		input: make(chan Task),
-		result: make(chan *TaskResult),
+		input:    make(chan Task),
+		result:   make(chan *TaskResult),
 		semaphor: make(chan struct{}, cnt),
 	}
 

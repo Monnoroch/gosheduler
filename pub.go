@@ -1,7 +1,7 @@
-package sheduler;
+package sheduler
 
 // The common interface for task output for type safety
-type TaskOutput interface {}
+type TaskOutput interface{}
 
 // The task interface, represents any runnable object
 type Task interface {
@@ -10,7 +10,7 @@ type Task interface {
 
 // The struct for representing the output assotiated with particular task
 type TaskResult struct {
-	Task Task
+	Task   Task
 	Output TaskOutput
 }
 
@@ -24,7 +24,6 @@ type Sheduler interface {
 	Result() chan *TaskResult
 }
 
-
 // The sheduler built with native semaphor, which starts a new goroutine for each task.
 // maxJobs is a maximum number of parallel jobs to run
 func NewShedulerNative(maxJobs int) Sheduler {
@@ -37,5 +36,3 @@ func NewShedulerNative(maxJobs int) Sheduler {
 func NewShedulerNGoroutines(maxJobs int) Sheduler {
 	return newShedulerNGoroutines(maxJobs)
 }
-
-
