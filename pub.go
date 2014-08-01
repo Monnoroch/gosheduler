@@ -1,3 +1,4 @@
+// Package provides the task sheduler abstraction, which can shedule parallel tasks and collect their results.
 package sheduler
 
 // The common interface for task output for type safety
